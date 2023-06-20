@@ -23,11 +23,11 @@ def createDistr(func, start=0, end=1, desl=0):
     x = np.linspace(start, end, 1001)
     y = func(x)
     S = np.trapz(y, x)
-    # add x deslocation:
+    # add x offset:
     x += desl
     # turn y_area = 1:
     y /= S
-    # add zero points on end and beginning:
+    # add zero points on the tail and the beginning:
     x = np.concatenate(([x[0]], x, [x[-1]]))
     y = np.concatenate(([0], y, [0]))
     plt.plot(x, y)
@@ -41,7 +41,7 @@ d1, x1, y1 = createDistr(f1, 0, 3)
 d2, x2, y2 = createDistr(f2, 0, 3, 2.5)
 d3, x3, y3 = createDistr(f3, -3, 3, 6)
 
-# simbols
+# symbols
 H = [0, 1, 2]
 
 # codes
@@ -79,12 +79,13 @@ def guesser(v):
 
 guessed_H = np.array(list(map(guesser, receivedMsg_Y)))
 
+
 file_sent = '\n'.join([*map(lambda a: f'{a}', np.split(sent_H, 1000))])
 file_received = '\n'.join([*map(lambda a: f'{a}', np.split(guessed_H, 1000))])
 
 numErr = np.count_nonzero(guessed_H - sent_H)
 porcErr = round(numErr / len(guessed_H) * 100, 1)
-print(f'number of Errors: {numErr}, ~{porcErr}%')
+print(f'number of Errors: {numErr}, ~{porcErr} %')
 
 
 # Create files for comparison:
@@ -98,7 +99,7 @@ file.close()
 
 err1, [[roots1]] = findErrProb([x1, y1], [x2, y2])
 err2, [[roots2]] = findErrProb([x2, y2], [x3, y3])
-print(f'error prob: {(err1 + err2)*100}%')
+print(f'error prob: {(err1 + err2)*100} %')
 print(f'roots: {roots1}, {roots2}')
 
 plt.xlim([0, 9])
